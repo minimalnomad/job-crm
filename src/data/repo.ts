@@ -5,16 +5,16 @@ const KEY = "jobcrm.apps.v1";
 export const loadApps = (): JobApp[] =>
   JSON.parse(localStorage.getItem(KEY) || "[]");
 
-export const saveApps = (list: JobApp[]) =>
-  localStorage.setItem(KEY, JSON.stringify(list));
+export const saveApps = (jobs: JobApp[]) =>
+  localStorage.setItem(KEY, JSON.stringify(jobs));
 
-export const upsertApp = (app: JobApp) => {
-  const list = loadApps();
-  const index = list.findIndex((a) => a.id === app.id);
-  if (index >= 0) list[index] = app;
-  else list.push(app);
-  saveApps(list);
+export const upsertApp = (job: JobApp) => {
+  const jobs = loadApps();
+  const index = jobs.findIndex((existing) => existing.id === job.id);
+  if (index >= 0) jobs[index] = job;
+  else jobs.push(job);
+  saveApps(jobs);
 };
 
 export const deleteApp = (id: string) =>
-  saveApps(loadApps().filter((a) => a.id !== id));
+  saveApps(loadApps().filter((existing) => existing.id !== id));
