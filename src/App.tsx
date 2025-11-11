@@ -11,7 +11,7 @@ export default function App() {
     <>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Montr</Typography>
+          <Typography variant="h6">Job Tracker</Typography>
         </Toolbar>
       </AppBar>
       <Container>
