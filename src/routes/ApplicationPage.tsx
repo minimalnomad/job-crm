@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import type { JobApp, Stage } from "../domain/types";
 import { STAGES } from "../domain/types";
-import { loadApps, upsertApp } from "../data/repo";
+import { loadApps, upsertApp, deleteApp } from "../data/repo";
 import JobAppCard from "../components/JobAppCard";
 import JobFormDialog from "../components/JobFormDialog";
 
@@ -46,6 +46,12 @@ export default function ApplicationsPage() {
     setOpen(true);
   };
 
+  const handleDeleteClick = (job: JobApp) => {
+    if (!window.confirm(`Delete "${job.title}"?`)) return;
+    deleteApp(job.id);
+    setApps(loadApps());
+  };
+
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       <Stack
@@ -84,7 +90,12 @@ export default function ApplicationsPage() {
 
             <Stack gap={1}>
               {appsByStage[stageDef.key].map((job) => (
-                <JobAppCard key={job.id} job={job} onClick={handleEditClick} />
+                <JobAppCard
+                  key={job.id}
+                  job={job}
+                  onEdit={handleEditClick}
+                  onDelete={handleDeleteClick}
+                />
               ))}
             </Stack>
           </Box>

@@ -1,28 +1,53 @@
-import { Card, CardContent, Chip, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Chip,
+  Stack,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import type { JobApp } from "../domain/types";
 
 interface JobAppCardProps {
   job: JobApp;
-  onClick?: (job: JobApp) => void;
+  onEdit?: (job: JobApp) => void;
+  onDelete?: (job: JobApp) => void;
 }
 
-export default function JobAppCard({ job, onClick }: JobAppCardProps) {
+export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
   return (
     <Card
       variant="outlined"
-      onClick={() => onClick?.(job)}
       sx={{
         borderRadius: 0,
         borderColor: "black",
-        cursor: onClick ? "pointer" : "default",
         "&:hover": { boxShadow: 3 },
       }}
     >
       <CardContent sx={{ p: 2.5 }}>
-        <Typography fontWeight={700}>{job.title}</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-          {job.company}
-        </Typography>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
+          <Stack>
+            <Typography fontWeight={700}>{job.title}</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+              {job.company}
+            </Typography>
+          </Stack>
+
+          <Stack direction="row" spacing={0.5}>
+            <IconButton onClick={() => onEdit?.(job)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton onClick={() => onDelete?.(job)}>
+              <DeleteIcon />
+            </IconButton>
+          </Stack>
+        </Stack>
 
         {!!job.tags.length && (
           <Stack direction="row" gap={0.5} flexWrap="wrap" sx={{ mt: 1 }}>
