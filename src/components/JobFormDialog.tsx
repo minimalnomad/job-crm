@@ -127,7 +127,7 @@ export default function JobFormDialog({
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth>
+    <Dialog open={open} onClose={handleClose} fullWidth keepMounted>
       <DialogTitle>{editingApp ? "Edit Job" : "Add Job"}</DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ mt: 1 }}>
