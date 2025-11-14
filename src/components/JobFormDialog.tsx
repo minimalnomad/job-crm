@@ -40,7 +40,7 @@ type FormAction =
 const formReducer = (state: JobFormState, action: FormAction): JobFormState => {
   switch (action.type) {
     case "SET_FIELD":
-      return { ...state, [action.field]: action.value as any };
+      return { ...state, [action.field]: action.value };
 
     case "RESET": {
       if (!action.payload) return initialFormState;
@@ -96,7 +96,7 @@ export default function JobFormDialog({
     if (!canSave) return;
 
     const now = new Date().toISOString();
-    const name = contactName; // trim 안 함
+    const name = contactName.trim();
     const email = contactEmail.trim() || undefined;
 
     const app: JobApp = {
@@ -164,7 +164,7 @@ export default function JobFormDialog({
               dispatch({
                 type: "SET_FIELD",
                 field: "stage",
-                value: e.target.value as Stage,
+                value: e.target.value,
               })
             }
           >
@@ -214,6 +214,7 @@ export default function JobFormDialog({
             />
             <TextField
               label="Email"
+              type="email"
               value={contactEmail}
               onChange={(e) =>
                 dispatch({
