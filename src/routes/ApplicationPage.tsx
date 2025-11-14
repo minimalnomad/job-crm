@@ -1,5 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography,
+  Snackbar,
+  Alert,
+  DialogTitle,
+  DialogContent,
+  Dialog,
+  DialogActions,
+} from "@mui/material";
 import type { JobApp, Stage } from "../domain/types";
 import { STAGES } from "../domain/types";
 import { loadApps, upsertApp, deleteApp } from "../data/repo";
@@ -10,6 +22,8 @@ export default function ApplicationsPage() {
   const [apps, setApps] = useState<JobApp[]>([]);
   const [open, setOpen] = useState(false);
   const [editingApp, setEditingApp] = useState<JobApp | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<JobApp | null>(null);
 
   useEffect(() => {
     setApps(loadApps());
@@ -47,9 +61,16 @@ export default function ApplicationsPage() {
   };
 
   const handleDeleteClick = (job: JobApp) => {
-    if (!window.confirm(`Delete "${job.title}"?`)) return;
-    deleteApp(job.id);
+    setPendingDelete(job);
+    setConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (!pendingDelete) return;
+    deleteApp(pendingDelete.id);
     setApps(loadApps());
+    setConfirmOpen(false);
+    setPendingDelete(null);
   };
 
   return (
@@ -108,6 +129,18 @@ export default function ApplicationsPage() {
         onSave={handleAppSave}
         editingApp={editingApp}
       />
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Delete Job</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete "{pendingDelete?.title}"?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
+          <Button color="error" onClick={confirmDelete} variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
