@@ -142,7 +142,7 @@ export default function JobFormDialog({
               })
             }
             required
-            autoFocus
+            autoFocus={!editingApp}
           />
           <TextField
             label="Job Title"
