@@ -40,10 +40,10 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
           </Stack>
 
           <Stack direction="row" spacing={0.5}>
-            <IconButton onClick={() => onEdit?.(job)}>
+            <IconButton aria-label="Edit job" onClick={() => onEdit?.(job)}>
               <EditIcon />
             </IconButton>
-            <IconButton onClick={() => onDelete?.(job)}>
+            <IconButton aria-label="Delete job" onClick={() => onDelete?.(job)}>
               <DeleteIcon />
             </IconButton>
           </Stack>
