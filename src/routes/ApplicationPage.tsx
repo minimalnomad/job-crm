@@ -5,18 +5,17 @@ import {
   Container,
   Stack,
   Typography,
-  Snackbar,
-  Alert,
+  Dialog,
   DialogTitle,
   DialogContent,
-  Dialog,
   DialogActions,
 } from "@mui/material";
+import { DndContext, type DragEndEvent } from "@dnd-kit/core";
 import type { JobApp, Stage } from "../domain/types";
 import { STAGES } from "../domain/types";
 import { loadApps, upsertApp, deleteApp } from "../data/repo";
-import JobAppCard from "../components/JobAppCard";
 import JobFormDialog from "../components/JobFormDialog";
+import DroppableColumn from "../components/DroppableColumn";
 
 export default function ApplicationsPage() {
   const [apps, setApps] = useState<JobApp[]>([]);
@@ -30,12 +29,10 @@ export default function ApplicationsPage() {
   }, []);
 
   const appsByStage = useMemo(() => {
-    const map: Record<Stage, JobApp[]> = {
-      applied: [],
-      interview: [],
-      offer: [],
-      rejected: [],
-    };
+    const map = STAGES.reduce(
+      (acc, s) => ({ ...acc, [s.key]: [] as JobApp[] }),
+      {} as Record<Stage, JobApp[]>
+    );
     apps.forEach((jobApp) => map[jobApp.stage].push(jobApp));
     return map;
   }, [apps]);
@@ -73,6 +70,23 @@ export default function ApplicationsPage() {
     setPendingDelete(null);
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const draggedId = active.id;
+    const targetStage = over.id as Stage;
+
+    setApps((prev) => {
+      const updated = prev.map((job) =>
+        job.id === draggedId ? { ...job, stage: targetStage } : job
+      );
+      const changedJob = updated.find((job) => job.id === draggedId);
+      if (changedJob) upsertApp(changedJob);
+      return updated;
+    });
+  };
+
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       <Stack
@@ -91,37 +105,30 @@ export default function ApplicationsPage() {
         </Button>
       </Stack>
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "1fr 1fr",
-            md: "repeat(4, 1fr)",
-          },
-          gap: 3,
-          alignItems: "start",
-        }}
-      >
-        {STAGES.map((stageDef) => (
-          <Box key={stageDef.key} sx={{ minWidth: 0 }}>
-            <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 1 }}>
-              {stageDef.label}
-            </Typography>
-
-            <Stack gap={1}>
-              {appsByStage[stageDef.key].map((job) => (
-                <JobAppCard
-                  key={job.id}
-                  job={job}
-                  onEdit={handleEditClick}
-                  onDelete={handleDeleteClick}
-                />
-              ))}
-            </Stack>
-          </Box>
-        ))}
-      </Box>
+      <DndContext onDragEnd={handleDragEnd}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "1fr 1fr",
+              md: "repeat(4, 1fr)",
+            },
+            gap: 3,
+            alignItems: "start",
+          }}
+        >
+          {STAGES.map((stageDef) => (
+            <DroppableColumn
+              key={stageDef.key}
+              stageDef={stageDef}
+              jobs={appsByStage[stageDef.key]}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteClick}
+            />
+          ))}
+        </Box>
+      </DndContext>
 
       <JobFormDialog
         open={open}
