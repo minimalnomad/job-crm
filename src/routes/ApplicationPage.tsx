@@ -2,38 +2,28 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
-  Card,
-  CardContent,
-  Chip,
   Container,
+  Stack,
+  Typography,
+  Snackbar,
+  Alert,
+  DialogTitle,
+  DialogContent,
   Dialog,
   DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  MenuItem,
-  Stack,
-  TextField,
-  Typography,
 } from "@mui/material";
 import type { JobApp, Stage } from "../domain/types";
 import { STAGES } from "../domain/types";
-import { loadApps, upsertApp } from "../data/repo";
-
-const newId = () =>
-  Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+import { loadApps, upsertApp, deleteApp } from "../data/repo";
+import JobAppCard from "../components/JobAppCard";
+import JobFormDialog from "../components/JobFormDialog";
 
 export default function ApplicationsPage() {
   const [apps, setApps] = useState<JobApp[]>([]);
   const [open, setOpen] = useState(false);
-
-  const [company, setCompany] = useState("");
-  const [title, setTitle] = useState("");
-  const [stage, setStage] = useState<Stage>("applied");
-  const [tags, setTags] = useState("");
-  const [notes, setNotes] = useState("");
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
+  const [editingApp, setEditingApp] = useState<JobApp | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<JobApp | null>(null);
 
   useEffect(() => {
     setApps(loadApps());
@@ -50,45 +40,37 @@ export default function ApplicationsPage() {
     return map;
   }, [apps]);
 
-  const resetForm = () => {
-    setCompany("");
-    setTitle("");
-    setStage("applied");
-    setTags("");
-    setNotes("");
-    setContactName("");
-    setContactEmail("");
-  };
-
-  const handleSave = () => {
-    if (!company.trim() || !title.trim()) return;
-    const now = new Date().toISOString();
-    const app: JobApp = {
-      id: newId(),
-      company: company.trim(),
-      title: title.trim(),
-      stage,
-      tags: tags
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
-      notes: notes.trim() || undefined,
-      contacts:
-        contactName || contactEmail
-          ? [
-              {
-                name: contactName || "Contact",
-                email: contactEmail || undefined,
-              },
-            ]
-          : [],
-      createdAt: now,
-      updatedAt: now,
-    };
+  const handleAppSave = (app: JobApp) => {
     upsertApp(app);
     setApps(loadApps());
+  };
+
+  const handleClose = () => {
     setOpen(false);
-    resetForm();
+    setEditingApp(null);
+  };
+
+  const handleAddClick = () => {
+    setEditingApp(null);
+    setOpen(true);
+  };
+
+  const handleEditClick = (job: JobApp) => {
+    setEditingApp(job);
+    setOpen(true);
+  };
+
+  const handleDeleteClick = (job: JobApp) => {
+    setPendingDelete(job);
+    setConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (!pendingDelete) return;
+    deleteApp(pendingDelete.id);
+    setApps(loadApps());
+    setConfirmOpen(false);
+    setPendingDelete(null);
   };
 
   return (
@@ -102,7 +84,7 @@ export default function ApplicationsPage() {
         <Typography variant="h5">Applications</Typography>
         <Button
           variant="contained"
-          onClick={() => setOpen(true)}
+          onClick={handleAddClick}
           sx={{ borderRadius: 2 }}
         >
           Add
@@ -129,129 +111,33 @@ export default function ApplicationsPage() {
 
             <Stack gap={1}>
               {appsByStage[stageDef.key].map((job) => (
-                <Card
+                <JobAppCard
                   key={job.id}
-                  variant="outlined"
-                  sx={{
-                    borderRadius: 0,
-                    borderColor: "black",
-                    "&:hover": { boxShadow: 3 },
-                  }}
-                >
-                  <CardContent sx={{ p: 2.5 }}>
-                    <Typography fontWeight={700}>{job.title}</Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ mt: 0.5 }}
-                    >
-                      {job.company}
-                    </Typography>
-
-                    {!!job.tags.length && (
-                      <Stack
-                        direction="row"
-                        gap={0.5}
-                        flexWrap="wrap"
-                        sx={{ mt: 1 }}
-                      >
-                        {job.tags.map((tag) => (
-                          <Chip key={tag} size="small" label={tag} />
-                        ))}
-                      </Stack>
-                    )}
-
-                    {job.notes && (
-                      <Typography variant="body2" sx={{ mt: 1 }}>
-                        {job.notes}
-                      </Typography>
-                    )}
-                  </CardContent>
-                </Card>
+                  job={job}
+                  onEdit={handleEditClick}
+                  onDelete={handleDeleteClick}
+                />
               ))}
             </Stack>
           </Box>
         ))}
       </Box>
 
-      <Dialog
+      <JobFormDialog
         open={open}
-        onClose={() => {
-          setOpen(false);
-          resetForm();
-        }}
-        fullWidth
-      >
-        <DialogTitle>Add Job</DialogTitle>
+        onClose={handleClose}
+        onSave={handleAppSave}
+        editingApp={editingApp}
+      />
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Delete Job</DialogTitle>
         <DialogContent>
-          <Stack gap={2} sx={{ mt: 1 }}>
-            <TextField
-              label="Company"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              required
-            />
-            <TextField
-              label="Job Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <TextField
-              select
-              label="Stage"
-              value={stage}
-              onChange={(e) => setStage(e.target.value as Stage)}
-            >
-              {STAGES.map((stageDef) => (
-                <MenuItem key={stageDef.key} value={stageDef.key}>
-                  {stageDef.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              label="Tags (comma separated)"
-              placeholder="remote, urgent"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-            />
-            <TextField
-              label="Notes"
-              multiline
-              minRows={3}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-            <Divider>Contact (optional)</Divider>
-            <Stack direction={{ xs: "column", sm: "row" }} gap={2}>
-              <TextField
-                label="Name"
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-              />
-              <TextField
-                label="Email"
-                value={contactEmail}
-                onChange={(e) => setContactEmail(e.target.value)}
-              />
-            </Stack>
-          </Stack>
+          Are you sure you want to delete "{pendingDelete?.title}"?
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              setOpen(false);
-              resetForm();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleSave}
-            disabled={!company.trim() || !title.trim()}
-          >
-            Save
+          <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
+          <Button color="error" onClick={confirmDelete} variant="contained">
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
