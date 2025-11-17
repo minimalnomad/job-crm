@@ -10,6 +10,8 @@ interface DroppableColumnProps {
   onDelete: (job: JobApp) => void;
 }
 
+const COLUMN_MIN_HEIGHT = "70vh";
+
 export default function DroppableColumn({
   stageDef,
   jobs,
@@ -25,7 +27,7 @@ export default function DroppableColumn({
       ref={setNodeRef}
       sx={{
         minWidth: 0,
-        minHeight: "70vh",
+        minHeight: COLUMN_MIN_HEIGHT,
         transition: "background-color 0.2s",
         backgroundColor: isOver ? "rgba(0, 0, 0, 0.05)" : "transparent",
         borderRadius: 1,
