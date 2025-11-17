@@ -10,12 +10,13 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { DndContext, type DragEndEvent } from "@dnd-kit/core";
+import { DndContext } from "@dnd-kit/core";
 import type { JobApp, Stage } from "../domain/types";
 import { STAGES } from "../domain/types";
 import { loadApps, upsertApp, deleteApp } from "../data/repo";
 import JobFormDialog from "../components/JobFormDialog";
 import DroppableColumn from "../components/DroppableColumn";
+import { useJobBoardDrag } from "../hooks/useJobBoardDrag";
 
 export default function ApplicationsPage() {
   const [apps, setApps] = useState<JobApp[]>([]);
@@ -23,6 +24,7 @@ export default function ApplicationsPage() {
   const [editingApp, setEditingApp] = useState<JobApp | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pendingDelete, setPendingDelete] = useState<JobApp | null>(null);
+  const { handleDragEnd } = useJobBoardDrag(setApps);
 
   useEffect(() => {
     setApps(loadApps());
@@ -68,23 +70,6 @@ export default function ApplicationsPage() {
     setApps(loadApps());
     setConfirmOpen(false);
     setPendingDelete(null);
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const draggedId = active.id;
-    const targetStage = over.id as Stage;
-
-    setApps((prev) => {
-      const updated = prev.map((job) =>
-        job.id === draggedId ? { ...job, stage: targetStage } : job
-      );
-      const changedJob = updated.find((job) => job.id === draggedId);
-      if (changedJob) upsertApp(changedJob);
-      return updated;
-    });
   };
 
   return (
