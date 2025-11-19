@@ -1,16 +1,21 @@
 import type { DragEndEvent } from "@dnd-kit/core";
-import type { JobApp, Stage } from "../domain/types";
+import { STAGES, type JobApp, type Stage } from "../domain/types";
 import { upsertApp } from "../data/repo";
 
 type SetApps = React.Dispatch<React.SetStateAction<JobApp[]>>;
 
+function isStage(value: string | number): value is Stage {
+  return STAGES.some((s) => s.key === value);
+}
 export function useJobBoardDrag(setApps: SetApps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
     const draggedId = active.id;
-    const targetStage = over.id as Stage;
+    if (!isStage(over.id)) return;
+
+    const targetStage = over.id;
 
     setApps((prev) => {
       const updated = prev.map((job) =>
