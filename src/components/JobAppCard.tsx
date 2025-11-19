@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { DragIndicator, Delete } from "@mui/icons-material";
 import { useDraggable } from "@dnd-kit/core";
 import type { JobApp } from "../domain/types";
 
@@ -27,11 +27,9 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
   return (
     <Card
       ref={setNodeRef}
-      {...listeners}
-      {...attributes}
       sx={{
         borderRadius: 1,
-        cursor: isDragging ? "grabbing" : "grab",
+        cursor: "pointer",
         transform: transform
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
@@ -40,6 +38,7 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
         transition: "box-shadow 0.2s ease-in-out",
         userSelect: "none",
       }}
+      onClick={() => onEdit?.(job)}
     >
       <CardContent sx={{ p: 2.5 }}>
         <Stack direction="row" justifyContent="space-between">
@@ -51,30 +50,10 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
           </Box>
 
           <Stack direction="row" spacing={0.5}>
-            {onEdit && (
-              <IconButton
-                size="small"
-                onPointerDown={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit(job);
-                }}
-              >
-                <Edit fontSize="small" />
-              </IconButton>
-            )}
-
             {onDelete && (
               <IconButton
                 size="small"
                 color="error"
-                onPointerDown={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(job);
@@ -83,6 +62,16 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
                 <Delete fontSize="small" />
               </IconButton>
             )}
+
+            <IconButton
+              size="small"
+              {...listeners}
+              {...attributes}
+              onClick={(e) => e.stopPropagation()}
+              sx={{ cursor: "grab" }}
+            >
+              <DragIndicator fontSize="small" />
+            </IconButton>
           </Stack>
         </Stack>
 
