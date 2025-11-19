@@ -18,6 +18,11 @@ export function useJobBoardDrag(setApps: SetApps) {
     const targetStage = over.id;
 
     setApps((prev) => {
+      const prevJob = prev.find((job) => job.id === draggedId);
+      if (!prevJob) return prev;
+
+      if (prevJob.stage === targetStage) return prev;
+
       const updated = prev.map((job) =>
         job.id === draggedId ? { ...job, stage: targetStage } : job
       );
