@@ -25,3 +25,8 @@ export const STAGES: { key: Stage; label: string }[] = [
   { key: "offer", label: "Offer" },
   { key: "rejected", label: "Rejected" },
 ];
+export interface FilterState {
+  search: string;
+  stage: Stage | "all";
+  tag: string | "all";
+}
