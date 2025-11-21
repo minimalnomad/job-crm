@@ -44,7 +44,7 @@ export default function ApplicationsPage() {
       });
     });
 
-    return Array.from(uniqueTags);
+    return Array.from(uniqueTags).sort();
   }, [apps]);
 
   const appsByStage = useMemo(() => {
