@@ -17,6 +17,8 @@ import { loadApps, upsertApp, deleteApp } from "../data/repo";
 import JobFormDialog from "../components/JobFormDialog";
 import DroppableColumn from "../components/DroppableColumn";
 import { useJobBoardDrag } from "../hooks/useJobBoardDrag";
+import SearchFilterBar from "../components/SearchFilterBar";
+import { useJobFilters } from "../hooks/useJobFilters";
 
 export default function ApplicationsPage() {
   const [apps, setApps] = useState<JobApp[]>([]);
@@ -26,18 +28,32 @@ export default function ApplicationsPage() {
   const [pendingDelete, setPendingDelete] = useState<JobApp | null>(null);
   const { handleDragEnd } = useJobBoardDrag(setApps);
 
+  const { filter, setFilter, filteredApps } = useJobFilters(apps);
+
   useEffect(() => {
     setApps(loadApps());
   }, []);
+
+  const allTags = useMemo(() => {
+    const uniqueTags = new Set<string>();
+    apps.forEach((jobApp) =>
+      jobApp.tags?.forEach((tag) => uniqueTags.add(tag))
+    );
+    return Array.from(uniqueTags).sort();
+  }, [apps]);
 
   const appsByStage = useMemo(() => {
     const map = STAGES.reduce(
       (acc, s) => ({ ...acc, [s.key]: [] as JobApp[] }),
       {} as Record<Stage, JobApp[]>
     );
-    apps.forEach((jobApp) => map[jobApp.stage].push(jobApp));
+
+    filteredApps.forEach((jobApp) => {
+      map[jobApp.stage].push(jobApp);
+    });
+
     return map;
-  }, [apps]);
+  }, [filteredApps]);
 
   const handleAppSave = (app: JobApp) => {
     upsertApp(app);
@@ -89,6 +105,8 @@ export default function ApplicationsPage() {
           Add
         </Button>
       </Stack>
+
+      <SearchFilterBar filter={filter} onChange={setFilter} allTags={allTags} />
 
       <DndContext onDragEnd={handleDragEnd}>
         <Box
