@@ -1,6 +1,6 @@
 import type { DragEndEvent } from "@dnd-kit/core";
 import { STAGES, type JobApp, type Stage } from "../domain/types";
-import { upsertApp } from "../data/repo";
+import { upsertApp, saveApps } from "../data/repo";
 
 type SetApps = React.Dispatch<React.SetStateAction<JobApp[]>>;
 
@@ -13,24 +13,42 @@ export function useJobBoardDrag(setApps: SetApps) {
     if (!over) return;
 
     const draggedId = active.id;
-    if (!isStage(over.id)) return;
-
-    const targetStage = over.id;
+    const overId = over.id;
 
     setApps((prev) => {
-      const prevJob = prev.find((job) => job.id === draggedId);
-      if (!prevJob) return prev;
+      const oldIndex = prev.findIndex((job) => job.id === draggedId);
+      const newIndex = prev.findIndex((job) => job.id === overId);
 
-      if (prevJob.stage === targetStage) return prev;
+      const draggedJob = prev[oldIndex];
+      const overJob = prev[newIndex];
 
-      const updated = prev.map((job) =>
-        job.id === draggedId ? { ...job, stage: targetStage } : job
-      );
+      if (!draggedJob || !overJob) return prev;
 
-      const changedJob = updated.find((job) => job.id === draggedId);
-      if (changedJob) upsertApp(changedJob);
+      if (draggedJob.stage === overJob.stage) {
+        const reordered = [...prev];
 
-      return updated;
+        reordered.splice(oldIndex, 1);
+        reordered.splice(newIndex, 0, draggedJob);
+
+        saveApps(reordered);
+        return reordered;
+      }
+
+      if (isStage(overId)) {
+        const targetStage = overId as Stage;
+
+        const updated = prev.map((job) =>
+          job.id === draggedId ? { ...job, stage: targetStage } : job
+        );
+
+        const changedJob = updated.find((job) => job.id === draggedId);
+        if (changedJob) upsertApp(changedJob);
+
+        saveApps(updated);
+        return updated;
+      }
+
+      return prev;
     });
   };
 

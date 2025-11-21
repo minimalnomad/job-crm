@@ -8,9 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { DragIndicator, Delete } from "@mui/icons-material";
-import { useDraggable } from "@dnd-kit/core";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
 import type { JobApp } from "../domain/types";
-
 interface JobAppCardProps {
   job: JobApp;
   onEdit?: (job: JobApp) => void;
@@ -18,15 +17,27 @@ interface JobAppCardProps {
 }
 
 export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: job.id,
-      data: { job },
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef: setDragRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: job.id,
+    data: { job },
+  });
+
+  const { setNodeRef: setDropRef, isOver } = useDroppable({
+    id: job.id,
+  });
 
   return (
     <Card
-      ref={setNodeRef}
+      ref={(node) => {
+        setDragRef(node);
+        setDropRef(node);
+      }}
       sx={{
         borderRadius: 1,
         cursor: "pointer",
@@ -34,6 +45,7 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
           ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
           : undefined,
         opacity: isDragging ? 0.5 : 1,
+        backgroundColor: isOver ? "rgba(0, 0, 0, 0.05)" : "white",
         "&:hover": { boxShadow: 3 },
         transition: "box-shadow 0.2s ease-in-out",
         userSelect: "none",
