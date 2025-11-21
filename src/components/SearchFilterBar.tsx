@@ -4,7 +4,7 @@ import { STAGES } from "../domain/types";
 
 interface Props {
   filter: FilterState;
-  onChange: (next: FilterState) => void;
+  onChange: React.Dispatch<React.SetStateAction<FilterState>>;
   allTags: string[];
 }
 
@@ -12,7 +12,8 @@ export default function SearchFilterBar({ filter, onChange, allTags }: Props) {
   const handleChange =
     (key: keyof FilterState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      onChange({ ...filter, [key]: e.target.value });
+      const value = e.target.value;
+      onChange((prev) => ({ ...prev, [key]: value }));
     };
 
   return (

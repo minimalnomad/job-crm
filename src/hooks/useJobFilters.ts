@@ -1,18 +1,19 @@
 import { useMemo, useState } from "react";
-import { type JobApp, type Stage } from "../domain/types";
+import { type JobApp, type FilterState } from "../domain/types";
 
 export function useJobFilters(apps: JobApp[]) {
-  const [search, setSearch] = useState("");
-  const [stage, setStage] = useState<Stage | "all">("all");
-  const [tag, setTag] = useState<string | "all">("all");
+  const [filter, setFilter] = useState<FilterState>({
+    search: "",
+    stage: "all",
+    tag: "all",
+  });
 
   const filteredApps = useMemo(() => {
-    const normalizedSearch = search.toLowerCase();
+    const normalizedSearch = filter.search.toLowerCase();
 
     return apps.filter((job) => {
-      const matchStage = stage === "all" || job.stage === stage;
-
-      const matchTag = tag === "all" || job.tags?.includes(tag);
+      const matchStage = filter.stage === "all" || job.stage === filter.stage;
+      const matchTag = filter.tag === "all" || job.tags?.includes(filter.tag);
 
       const matchSearch =
         job.title.toLowerCase().includes(normalizedSearch) ||
@@ -21,15 +22,6 @@ export function useJobFilters(apps: JobApp[]) {
 
       return matchStage && matchTag && matchSearch;
     });
-  }, [apps, search, tag, stage]);
-
-  return {
-    search,
-    setSearch,
-    stage,
-    setStage,
-    tag,
-    setTag,
-    filteredApps,
-  };
+  }, [apps, filter]);
+  return { filter, setFilter, filteredApps };
 }

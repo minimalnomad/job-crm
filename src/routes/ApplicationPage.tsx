@@ -28,8 +28,7 @@ export default function ApplicationsPage() {
   const [pendingDelete, setPendingDelete] = useState<JobApp | null>(null);
   const { handleDragEnd } = useJobBoardDrag(setApps);
 
-  const { search, setSearch, stage, setStage, tag, setTag, filteredApps } =
-    useJobFilters(apps);
+  const { filter, setFilter, filteredApps } = useJobFilters(apps);
 
   useEffect(() => {
     setApps(loadApps());
@@ -37,13 +36,9 @@ export default function ApplicationsPage() {
 
   const allTags = useMemo(() => {
     const uniqueTags = new Set<string>();
-
-    apps.forEach((jobApp) => {
-      jobApp.tags?.forEach((tag) => {
-        uniqueTags.add(tag);
-      });
-    });
-
+    apps.forEach((jobApp) =>
+      jobApp.tags?.forEach((tag) => uniqueTags.add(tag))
+    );
     return Array.from(uniqueTags).sort();
   }, [apps]);
 
@@ -111,15 +106,8 @@ export default function ApplicationsPage() {
         </Button>
       </Stack>
 
-      <SearchFilterBar
-        filter={{ search, stage, tag }}
-        onChange={({ search, stage, tag }) => {
-          setSearch(search);
-          setStage(stage);
-          setTag(tag);
-        }}
-        allTags={allTags}
-      />
+      <SearchFilterBar filter={filter} onChange={setFilter} allTags={allTags} />
+
       <DndContext onDragEnd={handleDragEnd}>
         <Box
           sx={{
