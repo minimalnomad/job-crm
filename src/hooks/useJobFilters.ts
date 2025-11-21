@@ -12,7 +12,7 @@ export function useJobFilters(apps: JobApp[]) {
     return apps.filter((job) => {
       const matchStage = stage === "all" || job.stage === stage;
 
-      const matchTag = tag === "all" || job.tags.includes(tag);
+      const matchTag = tag === "all" || job.tags?.includes(tag);
 
       const matchSearch =
         job.title.toLowerCase().includes(normalizedSearch) ||
