@@ -10,7 +10,8 @@ interface Props {
 
 export default function SearchFilterBar({ filter, onChange, allTags }: Props) {
   const handleChange =
-    (key: keyof FilterState) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    (key: keyof FilterState) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       onChange({ ...filter, [key]: e.target.value });
     };
 
