@@ -1,12 +1,13 @@
 import type { DragEndEvent } from "@dnd-kit/core";
 import { STAGES, type JobApp, type Stage } from "../domain/types";
-import { upsertApp, saveApps } from "../data/repo";
+import { upsertApp } from "../data/repo";
 
 type SetApps = React.Dispatch<React.SetStateAction<JobApp[]>>;
 
 function isStage(value: string | number): value is Stage {
   return STAGES.some((s) => s.key === value);
 }
+
 export function useJobBoardDrag(setApps: SetApps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -17,25 +18,23 @@ export function useJobBoardDrag(setApps: SetApps) {
 
     setApps((prev) => {
       const oldIndex = prev.findIndex((job) => job.id === draggedId);
-      const newIndex = prev.findIndex((job) => job.id === overId);
+      if (oldIndex === -1) return prev;
 
       const draggedJob = prev[oldIndex];
-      const overJob = prev[newIndex];
 
-      if (!draggedJob || !overJob) return prev;
+      const newIndex = prev.findIndex((job) => job.id === overId);
 
-      if (draggedJob.stage === overJob.stage) {
+      if (newIndex !== -1) {
         const reordered = [...prev];
-
         reordered.splice(oldIndex, 1);
         reordered.splice(newIndex, 0, draggedJob);
-
-        saveApps(reordered);
         return reordered;
       }
 
       if (isStage(overId)) {
-        const targetStage = overId as Stage;
+        const targetStage = overId;
+
+        if (draggedJob.stage === targetStage) return prev;
 
         const updated = prev.map((job) =>
           job.id === draggedId ? { ...job, stage: targetStage } : job
@@ -44,7 +43,6 @@ export function useJobBoardDrag(setApps: SetApps) {
         const changedJob = updated.find((job) => job.id === draggedId);
         if (changedJob) upsertApp(changedJob);
 
-        saveApps(updated);
         return updated;
       }
 
