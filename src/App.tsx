@@ -1,6 +1,8 @@
 import { AppBar, Toolbar, Typography, Container } from "@mui/material";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ApplicationsPage from "./routes/ApplicationPage";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./theme";
 
 const router = createBrowserRouter([
   { path: "/", element: <ApplicationsPage /> },
@@ -8,7 +10,7 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">Job Tracker</Typography>
@@ -17,6 +19,6 @@ export default function App() {
       <Container>
         <RouterProvider router={router} />
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
