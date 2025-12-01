@@ -64,6 +64,7 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
           <Stack direction="row" spacing={0.5}>
             {onDelete && (
               <IconButton
+                aria-label="delete job"
                 size="small"
                 color="error"
                 onClick={(e) => {

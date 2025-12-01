@@ -1,4 +1,10 @@
-import { AppBar, Toolbar, Typography, Container } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  CssBaseline,
+} from "@mui/material";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import ApplicationsPage from "./routes/ApplicationPage";
 import { ThemeProvider } from "@mui/material/styles";
@@ -11,6 +17,7 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6">Job Tracker</Typography>
