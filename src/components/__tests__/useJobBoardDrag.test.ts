@@ -24,7 +24,7 @@ describe("reorder test", () => {
     const { result } = renderHook(() => useJobBoardDrag(setApps));
     const { handleDragEnd } = result.current;
 
-    const event: MinimalDragEvent = {
+    const event: DragEvent = {
       active: { id: "2" },
       over: { id: "1" },
     };
