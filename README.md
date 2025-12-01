@@ -1,73 +1,108 @@
-# React + TypeScript + Vite
+# Job Tracker CRM (React + TypeScript + MUI + DnD Kit)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, personal job-tracking CRM inspired by Huntr.
+Built with React architecture, local persistence, and drag-and-drop interactions.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+### Core
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Add / Edit / Delete job applications
+- Kanban-style job stages
+  - applied -> interview -> offer -> rejected
+- Tags (e.g. `frontend`, `remote`, `urgent`)
+- Notes & company contact information
+- Filter by search, stage, tag
+- LocalStorage persistence
+- Responsive UI using Material UI
 
-## Expanding the ESLint configuration
+### Interactions
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Drag and drop cards between stages (dnd-kit)
+- Reorder cards within the same stage
+
+---
+
+## 🏗 Architecture
+
+This project follows a layered and component-driven architecture:
+
+### Design Principles
+
+- Component-based UI with reusable patterns (Card, Dialog, Filters)
+- State orchestration handled via custom hooks
+- Decoupled logic (filtering, drag-and-drop, persistence)
+
+### Layered Structure
+
+- **UI Layer** – MUI components & interaction views
+- **Logic Layer** – Custom hooks (`useJobFilters`, `useJobBoardDrag`)
+- **Domain Layer** – Type definitions (JobApp, Stage)
+- **Persistence Layer** – LocalStorage-backed repo (`repo.ts`)
+
+This structure keeps visual components light while isolating logic, improving testability and maintainability.
+
+---
+
+## 🧪 Testing (Vitest + React Testing Library)
+
+Implemented unit tests for key logic:
+
+- `JobAppCard`
+- `SearchFilterBar`
+- `useJobFilters`
+- `useJobBoardDrag` (drag -> reorder & stage change)
+
+Focus:
+
+- Input/output correctness
+- Stable filtering logic
+- Drag-and-drop behaviour without relying on DOM
+- Mocked persistence layer (`upsertApp`)
+
+🧪 Running Tests
 
 ```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+npx vitest
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
+
+## 🔧 Tech Stack
+
+- React 19
+- TypeScript
+- Vite
+- Material UI
+- dnd-kit
+- Vitest / React Testing Library
+- LocalStorage
+
+## 🗂 Folder Structure
 
 ```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+src / components / JobAppCard.tsx;
+JobFormDialog.tsx;
+DroppableColumn.tsx;
+SearchFilterBar.tsx;
+__tests__ / hooks / useJobFilters.ts;
+useJobBoardDrag.ts;
+__tests__ / data / repo.ts;
+domain / types.ts;
+routes / ApplicationPage.tsx;
+utils / id.ts;
 ```
+
+## ▶️ Running the App Locally
+
+```js
+pnpm install
+pnpm dev
+```
+
+## Deployment
+
+Deployed on Vercel
+[Live Demo](https://job-crm-delta.vercel.app/)
