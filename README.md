@@ -80,21 +80,6 @@ npx vitest
 - Vitest / React Testing Library
 - LocalStorage
 
-## 🗂 Folder Structure
-
-```js
-src / components / JobAppCard.tsx;
-JobFormDialog.tsx;
-DroppableColumn.tsx;
-SearchFilterBar.tsx;
-__tests__ / hooks / useJobFilters.ts;
-useJobBoardDrag.ts;
-__tests__ / data / repo.ts;
-domain / types.ts;
-routes / ApplicationPage.tsx;
-utils / id.ts;
-```
-
 ## ▶️ Running the App Locally
 
 ```js
