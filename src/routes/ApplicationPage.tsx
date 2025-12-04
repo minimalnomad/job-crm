@@ -100,7 +100,7 @@ export default function ApplicationsPage() {
           onClick={handleAddClick}
           sx={{ borderRadius: 2 }}
         >
-          Add
+          ADD
         </Button>
       </Stack>
       <SearchFilterBar filter={filter} onChange={setFilter} allTags={allTags} />

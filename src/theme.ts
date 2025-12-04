@@ -9,10 +9,6 @@ export const theme = createTheme({
     secondary: {
       main: "#ffffff",
     },
-    background: {
-      default: "#ffffff",
-      paper: "#ffffff",
-    },
     text: {
       primary: "#000000",
       secondary: "#333333",
@@ -30,9 +26,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          padding: "6px 18px",
+          padding: "8px 20px",
           textTransform: "none",
           fontWeight: 600,
+          fontSize: "1rem",
           backgroundColor: "#000",
           color: "#fff",
           ":hover": {
