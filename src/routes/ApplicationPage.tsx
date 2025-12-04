@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Stack,
-  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -96,7 +95,6 @@ export default function ApplicationsPage() {
         alignItems="center"
         sx={{ mb: 3, px: { xs: 2, md: 0 } }}
       >
-        <Typography variant="h5">Applications</Typography>
         <Button
           variant="contained"
           onClick={handleAddClick}
@@ -105,7 +103,6 @@ export default function ApplicationsPage() {
           Add
         </Button>
       </Stack>
-
       <SearchFilterBar filter={filter} onChange={setFilter} allTags={allTags} />
 
       <DndContext onDragEnd={handleDragEnd}>
