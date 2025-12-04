@@ -18,7 +18,15 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static" sx={{ p: 1, mb: 2 }}>
+      <AppBar
+        position="static"
+        sx={{
+          p: 1,
+          mb: 2,
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.text.secondary,
+        }}
+      >
         <Toolbar>
           <Typography variant="h5">JOB TRACKER</Typography>
         </Toolbar>
