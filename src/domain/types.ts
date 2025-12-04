@@ -20,10 +20,10 @@ export interface JobApp {
 }
 
 export const STAGES: { key: Stage; label: string }[] = [
-  { key: "applied", label: "Applied" },
-  { key: "interview", label: "Interview" },
-  { key: "offer", label: "Offer" },
-  { key: "rejected", label: "Rejected" },
+  { key: "applied", label: "APPLIED" },
+  { key: "interview", label: "INTERVIEW" },
+  { key: "offer", label: "OFFER" },
+  { key: "rejected", label: "REJECTED" },
 ];
 export interface FilterState {
   search: string;

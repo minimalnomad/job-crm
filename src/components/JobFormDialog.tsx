@@ -227,10 +227,10 @@ export default function JobFormDialog({
           </Stack>
         </Stack>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+      <DialogActions sx={{ mb: 1, mr: 1.5 }}>
+        <Button onClick={handleClose}>CANCEL</Button>
         <Button variant="contained" onClick={handleSave} disabled={!canSave}>
-          Save
+          SAVE
         </Button>
       </DialogActions>
     </Dialog>

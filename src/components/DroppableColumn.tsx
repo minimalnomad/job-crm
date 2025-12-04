@@ -18,6 +18,9 @@ export default function DroppableColumn({
   onEdit,
   onDelete,
 }: DroppableColumnProps) {
+  const isColumnEmpty = jobs.length === 0;
+  const EXTRA_SPACE = "20vh";
+
   const { setNodeRef, isOver } = useDroppable({
     id: stageDef.key,
   });
@@ -27,17 +30,23 @@ export default function DroppableColumn({
       ref={setNodeRef}
       sx={{
         minWidth: 0,
-        minHeight: COLUMN_MIN_HEIGHT,
+        width: { xs: "100%", sm: "auto" },
         transition: "background-color 0.2s",
         backgroundColor: isOver ? "rgba(0, 0, 0, 0.05)" : "transparent",
         borderRadius: 1,
-        p: 1,
+        minHeight: {
+          xs: "auto",
+          md: COLUMN_MIN_HEIGHT,
+        },
       }}
     >
       <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 1 }}>
         {stageDef.label}
       </Typography>
-      <Stack gap={1}>
+      <Stack
+        gap={1.5}
+        sx={{ minHeight: isColumnEmpty ? "20vh" : "auto", pb: EXTRA_SPACE }}
+      >
         {jobs.map((job) => (
           <JobAppCard
             key={job.id}

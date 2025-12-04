@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Stack,
-  Typography,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -89,23 +88,21 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
+    <Container maxWidth="lg" sx={{ py: 3, px: { xs: 0, md: 3 } }}>
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: 3, px: { xs: 2, md: 0 } }}
+        sx={{ mb: 3, px: { xs: 0, md: 0 } }}
       >
-        <Typography variant="h5">Applications</Typography>
         <Button
           variant="contained"
           onClick={handleAddClick}
           sx={{ borderRadius: 2 }}
         >
-          Add
+          ADD
         </Button>
       </Stack>
-
       <SearchFilterBar filter={filter} onChange={setFilter} allTags={allTags} />
 
       <DndContext onDragEnd={handleDragEnd}>
@@ -142,7 +139,7 @@ export default function ApplicationsPage() {
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Delete Job</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete "{pendingDelete?.title}"?
+          Are you sure you want to delete "{pendingDelete?.company}"?
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>

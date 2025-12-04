@@ -28,6 +28,7 @@ export default function SearchFilterBar({ filter, onChange, allTags }: Props) {
         size="small"
         value={filter.search}
         onChange={handleChange("search")}
+        sx={{ width: { xs: "100%", sm: "auto" }, flexGrow: { xs: 0, sm: 1 } }}
       />
 
       <TextField
@@ -36,7 +37,10 @@ export default function SearchFilterBar({ filter, onChange, allTags }: Props) {
         select
         value={filter.stage}
         onChange={handleChange("stage")}
-        sx={{ minWidth: 150 }}
+        sx={{
+          width: { xs: "100%", sm: "auto" },
+          flexGrow: 1,
+        }}
       >
         <MenuItem value="all">All</MenuItem>
         {STAGES.map((s) => (
@@ -52,7 +56,10 @@ export default function SearchFilterBar({ filter, onChange, allTags }: Props) {
         select
         value={filter.tag}
         onChange={handleChange("tag")}
-        sx={{ minWidth: 150 }}
+        sx={{
+          width: { xs: "100%", sm: "auto" },
+          flexGrow: 1,
+        }}
       >
         <MenuItem value="all">All</MenuItem>
         {allTags.map((tag) => (

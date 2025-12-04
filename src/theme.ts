@@ -9,10 +9,6 @@ export const theme = createTheme({
     secondary: {
       main: "#ffffff",
     },
-    background: {
-      default: "#ffffff",
-      paper: "#ffffff",
-    },
     text: {
       primary: "#000000",
       secondary: "#333333",
@@ -20,19 +16,20 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontFamily: `"Inter", "Pretendard", sans-serif`,
+    fontFamily: `"Kanit", "Pretendard", sans-serif`,
     h5: { fontWeight: 700 },
     subtitle1: { fontWeight: 600 },
-    body1: { fontSize: 16 },
+    body1: { fontSize: 15 },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           borderRadius: 8,
-          padding: "6px 18px",
+          padding: "8px 20px",
           textTransform: "none",
           fontWeight: 600,
+          fontSize: "1rem",
           backgroundColor: "#000",
           color: "#fff",
           ":hover": {
