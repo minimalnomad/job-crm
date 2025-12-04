@@ -18,9 +18,9 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static">
+      <AppBar position="static" sx={{ p: 1, mb: 2 }}>
         <Toolbar>
-          <Typography variant="h6">Job Tracker</Typography>
+          <Typography variant="h5">JOB TRACKER</Typography>
         </Toolbar>
       </AppBar>
       <Container>
