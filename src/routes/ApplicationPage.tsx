@@ -139,7 +139,7 @@ export default function ApplicationsPage() {
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>Delete Job</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete "{pendingDelete?.title}"?
+          Are you sure you want to delete "{pendingDelete?.company}"?
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
