@@ -58,9 +58,11 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
       <CardContent sx={{ p: 2.5 }}>
         <Stack direction="row" justifyContent="space-between">
           <Box>
-            <Typography fontWeight={700}>{job.title}</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-              {job.company}
+            <Typography fontWeight={700}>
+              {job.company.toUpperCase()}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 0.5 }}>
+              {job.title.toLowerCase()}
             </Typography>
           </Box>
 

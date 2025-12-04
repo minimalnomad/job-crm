@@ -20,10 +20,10 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontFamily: `"Inter", "Pretendard", sans-serif`,
+    fontFamily: `"Kanit", "Pretendard", sans-serif`,
     h5: { fontWeight: 700 },
     subtitle1: { fontWeight: 600 },
-    body1: { fontSize: 16 },
+    body1: { fontSize: 15 },
   },
   components: {
     MuiButton: {
