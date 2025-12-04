@@ -44,7 +44,7 @@ export default function DroppableColumn({
         {stageDef.label}
       </Typography>
       <Stack
-        gap={1}
+        gap={1.5}
         sx={{ minHeight: isColumnEmpty ? "20vh" : "auto", pb: EXTRA_SPACE }}
       >
         {jobs.map((job) => (

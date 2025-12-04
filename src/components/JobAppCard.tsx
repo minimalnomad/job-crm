@@ -39,8 +39,8 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
         setDropRef(node);
       }}
       sx={{
-        minHeight: 150,
-        height: 150,
+        minHeight: 155,
+        height: 155,
         overflow: "hidden",
         borderRadius: 1,
         cursor: "pointer",
