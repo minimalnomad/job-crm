@@ -138,7 +138,7 @@ export default function ApplicationsPage() {
         editingApp={editingApp}
       />
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle id="delete-job-dialog-title">Delete Job</DialogTitle>
+        <DialogTitle id="delete-job-dialog-title">DELETE JOB</DialogTitle>
         <DialogContent>
           Are you sure you want to delete "{pendingDelete?.company}"?
         </DialogContent>
