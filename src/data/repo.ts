@@ -1,9 +1,25 @@
 import type { JobApp } from "../domain/types";
+import { initialMockApps } from "./mockApps";
 
 const KEY = "jobcrm.apps.v1";
 
-export const loadApps = (): JobApp[] =>
-  JSON.parse(localStorage.getItem(KEY) || "[]");
+export const loadApps = (): JobApp[] => {
+  const storedData = localStorage.getItem(KEY);
+
+  if (!storedData) {
+    saveApps(initialMockApps);
+    return initialMockApps;
+  }
+
+  const apps = JSON.parse(storedData) as JobApp[];
+
+  if (apps.length === 0) {
+    saveApps(initialMockApps);
+    return initialMockApps;
+  }
+
+  return apps;
+};
 
 export const saveApps = (jobs: JobApp[]) =>
   localStorage.setItem(KEY, JSON.stringify(jobs));
