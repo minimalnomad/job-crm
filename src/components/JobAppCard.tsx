@@ -32,6 +32,8 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
     id: job.id,
   });
 
+  const titleId = `job-card-title-${job.id}`;
+
   return (
     <Card
       ref={(node) => {
@@ -54,11 +56,13 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
         userSelect: "none",
       }}
       onClick={() => onEdit?.(job)}
+      aria-labelledby={titleId}
+      role="listitem"
     >
       <CardContent sx={{ p: 2.5 }}>
         <Stack direction="row" justifyContent="space-between">
           <Box>
-            <Typography fontWeight={700}>
+            <Typography fontWeight={700} id={titleId}>
               {job.company.toUpperCase()}
             </Typography>
             <Typography variant="body2" sx={{ mt: 0.5 }}>
@@ -69,7 +73,7 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
           <Stack direction="row" spacing={0.5}>
             {onDelete && (
               <IconButton
-                aria-label="delete job"
+                aria-label={`Delete job application for ${job.company}`}
                 size="small"
                 color="error"
                 onClick={(e) => {
@@ -87,6 +91,7 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
               {...attributes}
               onClick={(e) => e.stopPropagation()}
               sx={{ cursor: "grab" }}
+              aria-label={`Drag to change stage for ${job.company}`}
             >
               <DragIndicator fontSize="small" />
             </IconButton>

@@ -26,9 +26,12 @@ export default function App() {
           backgroundColor: theme.palette.secondary.main,
           color: theme.palette.text.secondary,
         }}
+        role="banner"
       >
         <Toolbar>
-          <Typography variant="h5">JOB TRACKER</Typography>
+          <Typography variant="h5" role="heading">
+            JOB TRACKER
+          </Typography>
         </Toolbar>
       </AppBar>
       <Container>

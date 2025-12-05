@@ -128,7 +128,9 @@ export default function JobFormDialog({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth keepMounted>
-      <DialogTitle>{editingApp ? "Edit Job" : "Add Job"}</DialogTitle>
+      <DialogTitle id="job-form-dialog-title">
+        {editingApp ? "Edit Job" : "Add Job"}
+      </DialogTitle>
       <DialogContent>
         <Stack gap={2} sx={{ mt: 1 }}>
           <TextField
@@ -143,6 +145,7 @@ export default function JobFormDialog({
             }
             required
             autoFocus={!editingApp}
+            aria-required="true"
           />
           <TextField
             label="Job Title"
@@ -155,6 +158,7 @@ export default function JobFormDialog({
               })
             }
             required
+            aria-required="true"
           />
           <TextField
             select
@@ -167,6 +171,7 @@ export default function JobFormDialog({
                 value: e.target.value,
               })
             }
+            inputProps={{ role: "listbox" }}
           >
             {STAGES.map((stageDef) => (
               <MenuItem key={stageDef.key} value={stageDef.key}>
