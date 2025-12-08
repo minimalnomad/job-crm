@@ -25,6 +25,8 @@ export default function DroppableColumn({
     id: stageDef.key,
   });
 
+  const columnTitleId = `column-title-${stageDef.key}`;
+
   return (
     <Box
       ref={setNodeRef}
@@ -39,13 +41,20 @@ export default function DroppableColumn({
           md: COLUMN_MIN_HEIGHT,
         },
       }}
+      aria-labelledby={columnTitleId}
     >
-      <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 1 }}>
+      <Typography
+        variant="subtitle1"
+        fontWeight={700}
+        sx={{ mb: 1 }}
+        id={columnTitleId}
+      >
         {stageDef.label}
       </Typography>
       <Stack
         gap={1.5}
         sx={{ minHeight: isColumnEmpty ? "20vh" : "auto", pb: EXTRA_SPACE }}
+        role="list"
       >
         {jobs.map((job) => (
           <JobAppCard

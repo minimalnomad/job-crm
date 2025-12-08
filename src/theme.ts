@@ -30,6 +30,8 @@ export const theme = createTheme({
           textTransform: "none",
           fontWeight: 600,
           fontSize: "1rem",
+        },
+        containedPrimary: {
           backgroundColor: "#000",
           color: "#fff",
           ":hover": {

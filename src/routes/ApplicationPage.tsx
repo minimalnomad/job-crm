@@ -88,7 +88,7 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 3, px: { xs: 0, md: 3 } }}>
+    <Container maxWidth="lg" sx={{ py: 3, px: { xs: 0, md: 3 } }} role="main">
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -116,7 +116,9 @@ export default function ApplicationsPage() {
             },
             gap: 3,
             alignItems: "start",
+            touchAction: "none",
           }}
+          aria-label="Job Application Stages Board"
         >
           {STAGES.map((stageDef) => (
             <DroppableColumn
@@ -137,13 +139,18 @@ export default function ApplicationsPage() {
         editingApp={editingApp}
       />
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Delete Job</DialogTitle>
+        <DialogTitle id="delete-job-dialog-title">DELETE JOB</DialogTitle>
         <DialogContent>
           Are you sure you want to delete "{pendingDelete?.company}"?
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
-          <Button color="error" onClick={confirmDelete} variant="contained">
+          <Button
+            color="error"
+            onClick={confirmDelete}
+            variant="contained"
+            aria-label={`Confirm delete for ${pendingDelete?.company}`}
+          >
             Delete
           </Button>
         </DialogActions>
