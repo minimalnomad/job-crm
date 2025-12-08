@@ -3,6 +3,8 @@
 A lightweight, personal job-tracking CRM inspired by Huntr.
 Built with React architecture, local persistence, and drag-and-drop interactions.
 
+**Project Summary Doc:** [LINK](https://montugroup.atlassian.net/wiki/x/WYADVw)
+
 ---
 
 ## 🚀 Features
