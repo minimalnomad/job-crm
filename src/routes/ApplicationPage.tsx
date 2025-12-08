@@ -116,7 +116,6 @@ export default function ApplicationsPage() {
             },
             gap: 3,
             alignItems: "start",
-            touchAction: "none",
           }}
           aria-label="Job Application Stages Board"
         >

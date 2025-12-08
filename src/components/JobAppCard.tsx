@@ -90,7 +90,7 @@ export default function JobAppCard({ job, onEdit, onDelete }: JobAppCardProps) {
               {...listeners}
               {...attributes}
               onClick={(e) => e.stopPropagation()}
-              sx={{ cursor: "grab" }}
+              sx={{ cursor: "grab", touchAction: "none" }}
               aria-label={`Drag to change stage for ${job.company}`}
             >
               <DragIndicator fontSize="small" />
