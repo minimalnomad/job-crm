@@ -88,5 +88,4 @@ pnpm dev
 
 ## Deployment
 
-Deployed on Vercel
-[Live Demo](https://job-crm-delta.vercel.app/)
+[Live Demo](https://job-crm.netlify.app/)
